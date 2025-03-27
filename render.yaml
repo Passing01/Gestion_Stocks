@@ -16,6 +16,8 @@ services:
         value: /var/www/html/storage/database.sqlite
       - key: LOG_CHANNEL
         value: stderr
+      - key: SESSION_DRIVER
+        value: cookie
     disk:
       name: laravel-storage
       mountPath: /var/www/html/storage
