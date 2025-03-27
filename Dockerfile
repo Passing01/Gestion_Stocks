@@ -2,7 +2,7 @@ FROM php:8.2-apache
 
 # Installer les dépendances
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev \
+    git unzip libzip-dev sqlite3 \
     && docker-php-ext-install pdo pdo_mysql zip \
     && a2enmod rewrite
 
@@ -18,12 +18,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# Configurer Laravel
+# Configurer Laravel et permissions
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && touch storage/database.sqlite \
-    && chown -R www-data:www-data storage bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache \
     && chmod 664 storage/database.sqlite \
+    && sqlite3 storage/database.sqlite "PRAGMA journal_mode=WAL;" \
     && composer install --optimize-autoloader --no-dev \
     && [ -f .env ] || cp .env.example .env \
     && php artisan key:generate \
