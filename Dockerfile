@@ -30,6 +30,11 @@ RUN chown -R www-data:www-data /var/www/html \
 
 # 7. Installer les dépendances et configurer Laravel
 RUN composer install --optimize-autoloader --no-dev \
+    && touch storage/database.sqlite \
+    && sqlite3 storage/database.sqlite "PRAGMA journal_mode=WAL;" \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache \
+    && composer install --optimize-autoloader --no-dev \
     && php artisan key:generate \
     && php artisan migrate --force \
     && php artisan optimize
