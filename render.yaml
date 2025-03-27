@@ -17,7 +17,7 @@ services:
       - key: CACHE_DRIVER
         value: file
       - key: SESSION_DRIVER
-        value: database
+        value: /var/www/html/storage/database.sqlite
     disk:
       name: storage
       mountPath: /var/www/html/storage  # Stockage persistant pour SQLite
