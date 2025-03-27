@@ -17,16 +17,16 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     storage/logs \
     bootstrap/cache
 
-# Copier les fichiers nécessaires pour Composer
-COPY composer.json composer.lock ./
-
-# Installer les dépendances
-RUN composer install --optimize-autoloader --no-dev
-
-# Copier le reste de l'application
+# Copier TOUS les fichiers nécessaires avant l'installation
 COPY . .
 
-# Configurer les permissions et générer la clé
+# Installer les dépendances (en ignorant les scripts post-install)
+RUN composer install --optimize-autoloader --no-dev --no-scripts
+
+# Exécuter les scripts artisan après l'installation complète
+RUN composer run-script post-autoload-dump
+
+# Configurer les permissions
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
     && [ -f .env ] || cp .env.example .env \
