@@ -6,19 +6,11 @@ services:
     envVars:
       - key: APP_ENV
         value: production
-      - key: APP_KEY
-        generateValue: true  # Render génère automatiquement la clé
-      - key: APP_DEBUG
-        value: false
       - key: DB_CONNECTION
         value: sqlite
       - key: DB_DATABASE
         value: /var/www/html/storage/database.sqlite
-      - key: CACHE_DRIVER
-        value: file
-      - key: SESSION_DRIVER
-        value: cookie
     disk:
-      name: storage
-      mountPath: /var/www/html/storage  # Stockage persistant pour SQLite
+      name: laravel-storage
+      mountPath: /var/www/html/storage
       sizeGB: 1
