@@ -8,18 +8,11 @@ services:
         value: production
       - key: APP_KEY
         generateValue: true
-      - key: APP_DEBUG
-        value: "true"  # Désactiver après résolution
       - key: DB_CONNECTION
         value: sqlite
       - key: DB_DATABASE
         value: /var/www/html/storage/database.sqlite
-      - key: LOG_CHANNEL
-        value: stderr
-      - key: SESSION_DRIVER
-        value: cookie
     disk:
       name: laravel-storage
       mountPath: /var/www/html/storage
       sizeGB: 1
-    healthCheckPath: /health
