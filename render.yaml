@@ -1,23 +1,18 @@
 services:
   - type: web
-    name: laravel-sqlite-app 
-    runtime: php
-    buildCommand: |
-      composer install --optimize-autoloader --no-dev
-      touch storage/database.sqlite
-      php artisan migrate --force
-      php artisan optimize
-    startCommand: php artisan serve --host=0.0.0.0 --port=8000
+    name: laravel-docker
+    runtime: docker
+    dockerfilePath: Dockerfile
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_KEY
-        generateValue: true 
+        generateValue: true
       - key: DB_CONNECTION
         value: sqlite
       - key: DB_DATABASE
-        value: /var/www/storage/database.sqlite
+        value: /var/www/html/storage/database.sqlite
     disk:
       name: storage
-      mountPath: /var/www/storage
-      sizeGB: 1  # Stockage persistant pour SQLite
+      mountPath: /var/www/html/storage
+      sizeGB: 1
